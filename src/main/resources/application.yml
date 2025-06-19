@@ -1,0 +1,14 @@
+server:
+    port: 8081
+spring:
+    application:
+        name: approval-service
+    jpa:
+        database: POSTGRESQL
+        show-sql: true
+        hibernate:
+            ddl-auto: update
+    datasource:
+        url: jdbc:postgresql://localhost:5432/expense-db
+        username: admin
+        password: admin
