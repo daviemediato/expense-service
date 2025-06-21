@@ -2,12 +2,10 @@ package com.reimbursement.expense_service.controllers;
 
 import com.reimbursement.expense_service.dtos.ExpenseDto;
 import com.reimbursement.expense_service.services.ExpenseService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,9 +27,26 @@ public class ExpenseController
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ExpenseDto> getById(UUID id) {
+    public ResponseEntity<ExpenseDto> find(@PathVariable UUID id) {
         ExpenseDto expense = this.expenseService.findById(id);
 
         return new ResponseEntity<>(expense, HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<ExpenseDto> create(@RequestBody @Valid ExpenseDto expenseDto) {
+        ExpenseDto createdExpense = this.expenseService.create(expenseDto);
+
+        return new ResponseEntity<>(createdExpense, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+
+        // TODO: Implement soft delete
+
+        this.expenseService.delete(id);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
