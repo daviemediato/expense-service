@@ -1,5 +1,6 @@
 package com.reimbursement.expense_service.services.impl;
 
+import com.reimbursement.expense_service.clients.ApprovalApiClient;
 import com.reimbursement.expense_service.dtos.ExpenseDto;
 import com.reimbursement.expense_service.entities.ExpenseEntity;
 import com.reimbursement.expense_service.exceptions.ResourceNotFound;
@@ -17,6 +18,7 @@ import java.util.UUID;
 public class ExpenseServiceImpl implements ExpenseService {
     private final ExpenseRepository expenseRepository;
     private final ExpenseMapper expenseMapper;
+    private final ApprovalApiClient approvalApiClient;
 
     public List<ExpenseDto> findAll() {
         return this.expenseMapper.toDtoList(expenseRepository.findAll());
@@ -30,6 +32,12 @@ public class ExpenseServiceImpl implements ExpenseService {
     public ExpenseDto create(ExpenseDto expenseDto) {
         ExpenseEntity expenseEntity = this.expenseMapper.toEntity(expenseDto);
         ExpenseEntity savedExpense = this.expenseRepository.save(expenseEntity);
+
+        try {
+            this.approvalApiClient.create(savedExpense.getId(), "PENDING");
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to create approval for expense: " + savedExpense.getId(), e);
+        }
 
         return this.expenseMapper.toDto(savedExpense);
     }
