@@ -1,5 +1,5 @@
 server:
-    port: 8081
+    port: 8082
 spring:
     application:
         name: approval-service
@@ -9,6 +9,6 @@ spring:
         hibernate:
             ddl-auto: update
     datasource:
-        url: jdbc:postgresql://localhost:5432/expense-db
+        url: jdbc:postgresql://localhost:5433/expense-db
         username: admin
         password: admin
