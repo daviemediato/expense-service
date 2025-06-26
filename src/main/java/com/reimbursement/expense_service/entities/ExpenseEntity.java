@@ -1,5 +1,6 @@
 package com.reimbursement.expense_service.entities;
 
+import com.reimbursement.expense_service.enums.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,8 +34,9 @@ public class ExpenseEntity {
     @Column(nullable = false)
     private String type;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String status;
+    private Status status;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
