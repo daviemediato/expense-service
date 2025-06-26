@@ -1,12 +1,15 @@
 package com.reimbursement.expense_service.controllers;
 
 import com.reimbursement.expense_service.dtos.ExpenseDto;
+import com.reimbursement.expense_service.dtos.StatusUpdateDto;
+import com.reimbursement.expense_service.enums.Status;
 import com.reimbursement.expense_service.services.ExpenseService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -40,12 +43,27 @@ public class ExpenseController
         return new ResponseEntity<>(createdExpense, HttpStatus.CREATED);
     }
 
+    @PutMapping
+    public ResponseEntity<ExpenseDto> update(@RequestBody @Valid ExpenseDto expenseDto
+    ) {
+        ExpenseDto updatedExpense = this.expenseService.update(expenseDto);
+
+        return new ResponseEntity<>(updatedExpense, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<ExpenseDto> updateStatus(
+            @PathVariable UUID id,
+            @RequestBody @Valid StatusUpdateDto statusUpdate
+    ) {
+        ExpenseDto updatedExpense = this.expenseService.updateStatus(id, statusUpdate.getStatus());
+
+        return new ResponseEntity<>(updatedExpense, HttpStatus.OK);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
-
-        // TODO: Implement soft delete
-
-        this.expenseService.delete(id);
+        this.expenseService.softDelete(id);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
