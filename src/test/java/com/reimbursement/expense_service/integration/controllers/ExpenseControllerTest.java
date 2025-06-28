@@ -1,18 +1,24 @@
 package com.reimbursement.expense_service.integration.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.reimbursement.expense_service.dtos.ExpenseDto;
+import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
-import java.math.BigDecimal;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.reimbursement.expense_service.dtos.ExpenseDto;
+import com.reimbursement.expense_service.enums.Status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ExpenseControllerTest {
@@ -35,11 +41,10 @@ public class ExpenseControllerTest {
                 "user1",
                 new BigDecimal("50.0"),
                 "FOOD",
-                "PENDING",
+                Status.PENDING,
                 null,
                 null,
-                null
-        );
+                null);
 
         ResponseEntity<String> response = createExpense(expenseDto);
 
@@ -54,11 +59,10 @@ public class ExpenseControllerTest {
                 null,
                 null,
                 null,
-                "PENDING",
+                Status.PENDING,
                 null,
                 null,
-                null
-        );
+                null);
 
         ResponseEntity<String> response = createExpense(expenseDto);
 
