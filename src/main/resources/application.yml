@@ -12,3 +12,9 @@ spring:
         url: jdbc:postgresql://localhost:5433/expense-db
         username: admin
         password: admin
+    security:
+        oauth2:
+            resourceserver:
+                jwt:
+                    issuer-uri: http://localhost:8080/realms/master
+                    jwk-set-uri: http://localhost:8080/realms/master/protocol/openid-connect/certs
